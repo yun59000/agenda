@@ -52,13 +52,14 @@ class MyAgendaEvent:
         # First we load existing data into a dict.
         file_data = json.load(file)
         if key in file_data:
-          print("key found")
+          # print("key found")
           self.new = False
           return True
         else:
-          print("key not found")
+          # print("key not found")
           self.new = True
           return False
+        
   def getLastRecordIndex(self):
     with open(self.filename,'r') as file:
         # First we load existing data into a dict.
@@ -103,7 +104,7 @@ class MyAgendaEvent:
       values_view = elmt.keys()
       value_iterator = iter(values_view)
       first_key = next(value_iterator)
-      print(first_key)
+      # print(first_key)
       
       if elmt[first_key]["lib"] == lib:
         # print("trouvé")
@@ -136,25 +137,38 @@ def write_json_add(new_data, filename='../data/event.json'):
         json.dump(file_data, file, indent = 4, separators=(',',': '))
         print('Successfully appended to the JSON file')
 # ******************************    
-mon_evet = MyAgendaEvent("nouvel event","description","2021-12-24",[1,8,2])
-# print(mon_evet.lib)
-# print(mon_evet.listOfMilestonesObj.originalDate)
-# print(mon_evet.listOfMilestonesObj.milestonesInDays)
-# print(mon_evet.listOfMilestonesObj.milestonesAsDate)
-# print(mon_evet.listOfMilestonesObj.milestonesAsStrDate)
-
-new_data = mon_evet.createEvent()
-# print(mon_evet.jsonFormAgendaEvent)
-
-#**********************************
-if mon_evet.new == True:
-  write_json_add(new_data)  
-  # pass
-else:
-  print("event already exist please change lib")
+def create():
+  # demander les infos
+  listOfMilestoneInt = []
+  lib = input("Nom de l'evenement: ")
+  description = input("Description de l'evenement: ")
+  milestones = input("Delais à appliquer en jours, séparé par un espace si plusieurs: ")
+  listOfMilestoneStr = milestones.split()
+  for elmt in listOfMilestoneStr:
+      listOfMilestoneInt.append(int(elmt))
   
-mon_evet.editEvent("nouvel event4","description","une autre edit descrp")
+  mon_evet = MyAgendaEvent(lib,description,"2021-12-24",listOfMilestoneInt)
+  new_data = mon_evet.createEvent()
+  if mon_evet.new == True:
+    write_json_add(new_data)  
+    # pass
+  else:
+    print("event already exist please change lib")
+  
+# mon_evet.editEvent("nouvel event4","description","une autre edit descrp")
+
 #controle unicité json lib                                 *******************OK
 #transform function def milestone to really add milestone to a date **********OK with obj 
 #add def to add milestone to the JSON Object               *******************OK
 #edit one param at a time                                  *******************OK
+print("Programme de gestion d'evenements calendaire")
+print("Actions : ")
+print(" 1 - Créer un évenement")
+print(" 2 - Editer un évenement")
+print(" 3 - Supprimer un évenement")
+print(" 4 - Consulter les événements")
+x = input('Entrer une valeur : ')
+print('You entered : ', x)
+switch={
+  '1': create()
+}
