@@ -140,6 +140,10 @@ def write_json_add(new_data, filename='../data/event.json'):
 def create():
   # demander les infos
   listOfMilestoneInt = []
+  evtStartDateYYYY = input("Date de début de l'evenement - Année: AAAA: ") #check date a mettre en place
+  evtStartDateMM = input("Date de début de l'evenement - Mois: MM: ")
+  evtStartDateDD = input("Date de début de l'evenement - Jours: DD: ")
+  evtStartDate = evtStartDateYYYY + "-" + evtStartDateMM + "-" + evtStartDateDD
   lib = input("Nom de l'evenement: ")
   description = input("Description de l'evenement: ")
   milestones = input("Delais à appliquer en jours, séparé par un espace si plusieurs: ")
@@ -147,7 +151,7 @@ def create():
   for elmt in listOfMilestoneStr:
       listOfMilestoneInt.append(int(elmt))
   
-  mon_evet = MyAgendaEvent(lib,description,"2021-12-24",listOfMilestoneInt)
+  mon_evet = MyAgendaEvent(lib,description,evtStartDate,listOfMilestoneInt)
   new_data = mon_evet.createEvent()
   if mon_evet.new == True:
     write_json_add(new_data)  
@@ -155,6 +159,39 @@ def create():
   else:
     print("event already exist please change lib")
   
+def days_between(d1, d2):
+    d1 = datetime.datetime.strptime(d1, "%Y-%m-%d")
+    d2 = datetime.datetime.strptime(d2, "%Y-%m-%d")
+    return abs((d2 - d1).days)
+#print(days_between("2022-12-24","2021-12-24"))
+def showEvents(filename='../data/event.json'):
+    #lire
+    with open(filename,'r') as file:
+        # First we load existing data into a dict.
+        file_data = json.load(file)
+    
+    for elmt in file_data:
+        values_view = elmt.keys()
+        value_iterator = iter(values_view)
+        first_key = next(value_iterator)
+        i=0
+        for myList in elmt:
+          eachList = list(elmt[first_key].items())
+          # print(eachList)
+          print("event:")
+          for eachItem in eachList:
+            # print("event:")
+            print("%s -> %s" % (eachItem))
+            
+        # print(elmt[first_key]["description"])
+        # print(elmt[first_key]["date_ori"])
+        # print(elmt[first_key]["date_edit"])
+          # print(list(elmt[first_key])[i])
+          print("**************************")
+          i = i + 1
+    #afficher
+    
+showEvents()
 # mon_evet.editEvent("nouvel event4","description","une autre edit descrp")
 
 #controle unicité json lib                                 *******************OK
@@ -167,8 +204,9 @@ print(" 1 - Créer un évenement")
 print(" 2 - Editer un évenement")
 print(" 3 - Supprimer un évenement")
 print(" 4 - Consulter les événements")
-x = input('Entrer une valeur : ')
-print('You entered : ', x)
-switch={
-  '1': create()
-}
+
+# x = input('Entrer une valeur : ')
+# print('You entered : ', x)
+# switch={
+#   '1': create()
+# }
