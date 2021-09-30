@@ -1,9 +1,12 @@
 import json
 from os import path
 import datetime
+# from smtp import sendMail
+from colorama import init, Fore, Back, Style
 
 filename = '../data/event.json'
 listObj = []
+init(autoreset=True)
 
 # check if file exist
 def check_if_file_exist(filename):
@@ -74,8 +77,8 @@ class MyAgendaEvent:
     return lastIndex
 
   def createEvent(self):
-    dateTimeObj = datetime.datetime.now()
-    timestampStr = dateTimeObj.strftime("%Y%m%d%H%M%S")
+    # dateTimeObj = datetime.datetime.now()
+    # timestampStr = dateTimeObj.strftime("%Y%m%d%H%M%S")
     i= 1
     lastIndex = self.getLastRecordIndex()
     index = str(int(lastIndex) + 1)
@@ -140,13 +143,25 @@ def write_json_add(new_data, filename='../data/event.json'):
 def create():
   # demander les infos
   listOfMilestoneInt = []
-  evtStartDateYYYY = input("Date de début de l'evenement - Année: AAAA: ") #check date a mettre en place
-  evtStartDateMM = input("Date de début de l'evenement - Mois: MM: ")
-  evtStartDateDD = input("Date de début de l'evenement - Jours: DD: ")
-  evtStartDate = evtStartDateYYYY + "-" + evtStartDateMM + "-" + evtStartDateDD
-  lib = input("Nom de l'evenement: ")
-  description = input("Description de l'evenement: ")
-  milestones = input("Delais à appliquer en jours, séparé par un espace si plusieurs: ")
+  err = True
+  while err == True:
+    evtStartDateYYYY = input("Date de début de l'evenement - Année: AAAA: ") #check date a mettre en place
+    if evtStartDateYYYY > 2020:
+      err = False
+    evtStartDateMM = input("Date de début de l'evenement - Mois: MM: ")
+    if evtStartDateMM > 0 and evtStartDateMM < 13:
+      err = False
+    evtStartDateDD = input("Date de début de l'evenement - Jours: DD: ")
+    if evtStartDateDD > 0 and evtStartDateDD < 32:
+      err = False
+    evtStartDate = evtStartDateYYYY + "-" + evtStartDateMM + "-" + evtStartDateDD
+    lib = input("Nom de l'evenement: ")
+    if lib != "":
+      err = False
+    description = input("Description de l'evenement: ")
+    milestones = input("Delais à appliquer en jours, séparé par un espace si plusieurs: ")
+    if milestones == "":
+      milestones = 0
   listOfMilestoneStr = milestones.split()
   for elmt in listOfMilestoneStr:
       listOfMilestoneInt.append(int(elmt))
@@ -162,10 +177,13 @@ def create():
 def days_between(d1, d2):
     d1 = datetime.datetime.strptime(d1, "%Y-%m-%d")
     d2 = datetime.datetime.strptime(d2, "%Y-%m-%d")
-    return abs((d2 - d1).days)
+    return str(abs((d2 - d1).days))
 #print(days_between("2022-12-24","2021-12-24"))
+
 def showEvents(filename='../data/event.json'):
-    #lire
+    #lire    
+    aujourdhui = datetime.datetime.now()
+    timestampStr = aujourdhui.strftime("%Y-%m-%d")
     with open(filename,'r') as file:
         # First we load existing data into a dict.
         file_data = json.load(file)
@@ -175,13 +193,40 @@ def showEvents(filename='../data/event.json'):
         value_iterator = iter(values_view)
         first_key = next(value_iterator)
         i=0
+        listOfData = []
+        listOfDataToNotify = []
         for myList in elmt:
           eachList = list(elmt[first_key].items())
           # print(eachList)
-          print("event:")
+          # print("event:")
+          listTemp = []
+          toNotify = False
           for eachItem in eachList:
-            # print("event:")
-            print("%s -> %s" % (eachItem))
+            # print(eachItem[0][7:])
+            if eachItem[0][7:] == "milestone":
+              date_time_obj = eachItem[1]
+              diffDay = days_between(timestampStr,date_time_obj)
+              # print(eachItem[0]+" -> "+eachItem[1]+" ->prévu dans "+diffDay+" jours")
+              # print("diff : "+diffDay)
+              if int(diffDay) <= 15:
+                toNotify = True
+                listTemp.append(Fore.RED +eachItem[0]+" -> "+eachItem[1]+" ->prévu dans "+diffDay+" jours")
+                listOfData.append(eachItem[0]+" -> "+eachItem[1]+" ->prévu dans "+diffDay+" jours")
+              elif int(diffDay) > 15 and int(diffDay) <= 31:
+                listTemp.append(Fore.YELLOW +eachItem[0]+" -> "+eachItem[1]+" ->prévu dans "+diffDay+" jours")
+                listOfData.append(eachItem[0]+" -> "+eachItem[1]+" ->prévu dans "+diffDay+" jours")
+              else:
+                listOfData.append(eachItem[0]+" -> "+eachItem[1]+" ->prévu dans "+diffDay+" jours")
+                listTemp.append(Fore.GREEN +eachItem[0]+" -> "+eachItem[1]+" ->prévu dans "+diffDay+" jours")
+            else:
+              # print("%s -> %s" % (eachItem))
+              listOfData.append("%s -> %s" % (eachItem))
+              listTemp.append("%s -> %s" % (eachItem))
+          if toNotify == True:
+            listOfDataToNotify.append(listTemp)
+            for lignes in listTemp:
+              print(lignes)
+            input("Press a key to continue...")
             
         # print(elmt[first_key]["description"])
         # print(elmt[first_key]["date_ori"])
@@ -189,9 +234,10 @@ def showEvents(filename='../data/event.json'):
           # print(list(elmt[first_key])[i])
           print("**************************")
           i = i + 1
+    # sendMail(listOfData)
     #afficher
     
-showEvents()
+
 # mon_evet.editEvent("nouvel event4","description","une autre edit descrp")
 
 #controle unicité json lib                                 *******************OK
@@ -205,8 +251,12 @@ print(" 2 - Editer un évenement")
 print(" 3 - Supprimer un évenement")
 print(" 4 - Consulter les événements")
 
-# x = input('Entrer une valeur : ')
+x = input('Entrer une valeur : ')
 # print('You entered : ', x)
-# switch={
-#   '1': create()
-# }
+def choice(i):  
+  if i == "1":
+    create()
+  elif i == "4":
+    showEvents()
+
+choice(x)
