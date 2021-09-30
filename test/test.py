@@ -354,3 +354,9 @@ choice()
 # agenda
     # events
         # milestones
+  
+# jalon en jours dans l'objet
+# check choice a l'edition
+# check modif si key n'existe pas
+# fonction ajouter un jalons
+# fonction supprimer un jalons

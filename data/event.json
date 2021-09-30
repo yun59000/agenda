@@ -228,5 +228,17 @@
             "date_2_milestone": "2021-10-10",
             "date_3_milestone": "2021-10-16"
         }
+    },
+    {
+        "event20": {
+            "lib": "offre",
+            "index": "20",
+            "description": "offre gambin/dupuis",
+            "date_ori": "2021-09-29",
+            "date_edit": "",
+            "date_1_milestone": "2021-11-28",
+            "date_2_milestone": "2022-01-27",
+            "descritpion": "un pti chat"
+        }
     }
 ]
