@@ -355,8 +355,8 @@ choice()
     # events
         # milestones
   
-# jalon en jours dans l'objet
+# jalon en jours dans l'objet       OK
 # check choice a l'edition
-# check modif si key n'existe pas
+
 # fonction ajouter un jalons
 # fonction supprimer un jalons
