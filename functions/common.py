@@ -63,6 +63,8 @@ class Agenda:
                     self.checkAndUpdateMilestones()
                 else:
                     print("date check KO")
+            else:
+                print("edited: "+ keyToChange + editedValue)
 
         def createMilestones(self, dictOfMilestones):#{ "mile" : [{"lib":"monmile1","mile":"5"}, {"lib":"monmile2","mile":"2"} ]}
             # print("---**---"+str(dictOfMilestones))
@@ -95,11 +97,16 @@ class Agenda:
             for milestone in self.listOfMilestonesObjects:                
                 if dictValues["mileLib"] == milestone.lib:
                     if keyToModify == "initialDate":    
-                        print("dictvalue: "+dictValues["keyValue"])                    
+                        print("dictvalue: "+ dictValues["keyValue"])                    
                         d1 = dictValues["keyValue"]
+                        # print("date init: "+str(milestone.initialDate) + "  ee  " + str(milestone.calculatedMilestone))
                         milestone.initialDate = datetime.datetime.strptime(d1, "%Y-%m-%d")
+                        # self.strStartDate = datetime.datetime.strptime(d1, "%Y-%m-%d")
+                        # print("date initaprès: "+str(milestone.initialDate)+ "  ee  " + str(milestone.calculatedMilestone))
                         milestone.generate_date_with_milestones(int(milestone.milestone))
+                        # print("date initaprès:1 "+str(milestone.initialDate)+ "  ee 1 " + str(milestone.calculatedMilestone))
                         self.checkAndUpdateMilestones()                       
+                        # print("date initaprès:2 "+str(milestone.initialDate)+ "  ee  2 " + str(milestone.calculatedMilestone))
                     elif keyToModify == "milestone" : #recalculer les dates
                         # print("dictvalue: "+dictValues["keyValue"])
                         milestone.milestone = dictValues["keyValue"]                        
@@ -118,8 +125,8 @@ class Agenda:
             nbElem = len(self.listOfMilestonesObjects) 
 #            datetime.datetime.strptime(self.strStartDate, "%Y-%m-%d")
             #Check and update the first milestone
-            self.listOfMilestonesObjects[0].initialDate = datetime.datetime.strptime(self.strStartDate, "%Y-%m-%d")
-            self.listOfMilestonesObjects[0].calculatedMilestone = datetime.datetime.strptime(self.strStartDate, "%Y-%m-%d") + datetime.timedelta(self.listOfMilestonesObjects[0].milestone)
+            # self.listOfMilestonesObjects[0].initialDate = datetime.datetime.strptime(self.strStartDate, "%Y-%m-%d")
+            # self.listOfMilestonesObjects[0].calculatedMilestone = datetime.datetime.strptime(self.strStartDate, "%Y-%m-%d") + datetime.timedelta(int(self.listOfMilestonesObjects[0].milestone))
             #check and update all others milestones of this event
             for i  in range(nbElem -1):                
                 # print("*****************Avant************Mile -1 date: "+str(self.listOfMilestonesObjects[i].initialDate  ))
@@ -169,6 +176,7 @@ class Agenda:
             
             def printMilestone(self):
                 print("        --------*Milestone***DEB******")
+                print("        initDate: " + self.initialDate.strftime("%Y-%m-%d"))
                 print("        lib: " + self.lib)
                 print("        milestone: " + str(self.milestone))
                 print("        calc milestone: " + self.calculatedMilestone.strftime("%Y-%m-%d"))

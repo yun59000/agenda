@@ -75,12 +75,20 @@ def choice():
     print("Programme de gestion d'evenements calendaire")
     print("Actions : ")
     print(" 1 - Créer un évenement")#OK
-    print(" 2 - Editer un évenement")
-    print(" 3 - Supprimer un évenement")
-    print(" 4 - Consulter les événements")
-    print(" 5 - Consulter les événement à notifier")
+    print(" 2 - Editer un évenement")#OK
+      #edit evt :
+        # lib             OK
+        # startDate       OK
+        # description     OK
+        # milestones
+          # lib           OK
+          # initialDate   OK
+          # milestone     OK
+    print(" 3 - Supprimer un évenement")#OK
+    print(" 4 - Consulter les événements")#OK
+    print(" 5 - Consulter les notifications")
     print(" 6 - Rechercher un événement")
-    print(" 0 - exit")
+    print(" 0 - exit")#OK
     x = input('Entrer une valeur : ')
     if x == "1":
       create()
@@ -108,6 +116,7 @@ def choice():
           else:
               newdmilestone3 = {"mileLib" : milestoneLib,"key": milestonekey, "keyValue" : 5}
               event.editEvent(key, newdmilestone3)
+              event.checkAndUpdateMilestones()
               #ajouter recalcul des milestones  
           
       else:
