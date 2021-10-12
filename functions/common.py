@@ -1,4 +1,3 @@
-
 import datetime
 
 class Agenda:
@@ -10,6 +9,16 @@ class Agenda:
         # print(dictOfMilestones){ "mile" : [{"lib":"monmile1","mile":"5"}, {"lib":"monmile2","mile":"2"} ]}
         event = self.Event(lib, description, strStartdate, dictOfMilestones)
         self.listOfEvents.append(event)
+        
+    def delEvent(self,eventLib):
+        print("supp: " + eventLib )        
+        # for elm in self.listOfEvents:
+        #     print("dd - avant" + elm.lib)
+        for elm in self.listOfEvents:            
+            if elm.lib == eventLib:                
+                self.listOfEvents.remove(elm)
+        # for elm in self.listOfEvents:
+        #     print("dd - après" + elm.lib)
 
     def printAgenda(self):
         print("*********Agenda***DEB******")
@@ -68,6 +77,17 @@ class Agenda:
                 oldMile = int(eachMilestone["mile"])
                 index += 1
             self.checkAndUpdateMilestones()
+            
+        def deleteMilestone(self, milestonelib):#{ "mile" : [{"lib":"monmile1","mile":"5"}, {"lib":"monmile2","mile":"2"} ]}
+            # print("---**---"+str(dictOfMilestones))           
+            for eachMilestone in self.listOfMilestonesObjects:
+                print("dd " + eachMilestone.lib)
+            for eachMilestone in self.listOfMilestonesObjects:
+                # print("dd" + eachMilestone.lib)
+                if eachMilestone.lib == milestonelib:
+                    self.listOfMilestonesObjects.remove(eachMilestone)
+            for eachMilestone in self.listOfMilestonesObjects:
+                print("dd apres " + eachMilestone.lib)
         
         def editMilestone(self,dictValues):
         #{"mileLib" :"" ,"key":"initialDate", "keyValue" :""} ou {"mileLib" :"" , "key":"milestone", "keyValue" : ""}
@@ -88,6 +108,8 @@ class Agenda:
                     elif keyToModify == "lib":
                         print("dictvalue: "+dictValues["keyValue"])
                         milestone.lib = dictValues["keyValue"]
+                    elif keyToModify == "delete":
+                        self.listOfMilestonesObjects.remove(milestone)
                 else:
                     print("no milestone with that lib: "+dictValues["mileLib"])
 
@@ -100,21 +122,21 @@ class Agenda:
             self.listOfMilestonesObjects[0].calculatedMilestone = datetime.datetime.strptime(self.strStartDate, "%Y-%m-%d") + datetime.timedelta(self.listOfMilestonesObjects[0].milestone)
             #check and update all others milestones of this event
             for i  in range(nbElem -1):                
-                print("*****************Avant************Mile -1 date: "+str(self.listOfMilestonesObjects[i].initialDate  ))
-                print("*****************Avant************Mile -1 mile: "+str(self.listOfMilestonesObjects[i].milestone  ))                
-                print("*****************Avant************Mile -1 datecalc: "+str(self.listOfMilestonesObjects[i].calculatedMilestone  ))
-                print("*****************Avant************Mile courant date: "+str(self.listOfMilestonesObjects[i+1].initialDate  ))
-                print("*****************Avant************Mile courant mile: "+str(self.listOfMilestonesObjects[i+1].milestone  ))
-                print("*****************Avant************Mile courant datecalc: "+str(self.listOfMilestonesObjects[i+1].calculatedMilestone  ))                
+                # print("*****************Avant************Mile -1 date: "+str(self.listOfMilestonesObjects[i].initialDate  ))
+                # print("*****************Avant************Mile -1 mile: "+str(self.listOfMilestonesObjects[i].milestone  ))                
+                # print("*****************Avant************Mile -1 datecalc: "+str(self.listOfMilestonesObjects[i].calculatedMilestone  ))
+                # print("*****************Avant************Mile courant date: "+str(self.listOfMilestonesObjects[i+1].initialDate  ))
+                # print("*****************Avant************Mile courant mile: "+str(self.listOfMilestonesObjects[i+1].milestone  ))
+                # print("*****************Avant************Mile courant datecalc: "+str(self.listOfMilestonesObjects[i+1].calculatedMilestone  ))                
                 if self.listOfMilestonesObjects[i+1].initialDate != self.listOfMilestonesObjects[i].calculatedMilestone :
                     self.listOfMilestonesObjects[i+1].initialDate = self.listOfMilestonesObjects[i].calculatedMilestone 
                     self.listOfMilestonesObjects[i+1].calculatedMilestone = self.listOfMilestonesObjects[i+1].generate_date_with_milestones(int(self.listOfMilestonesObjects[i+1].milestone))
-                    print("*****************Après************Mile -1 date: "+str(self.listOfMilestonesObjects[i].initialDate  ))
-                    print("*****************Après************Mile -1 mile: "+str(self.listOfMilestonesObjects[i].milestone  ))
-                    print("*****************Après************Mile -1 datecalc: "+str(self.listOfMilestonesObjects[i].calculatedMilestone  ))
-                    print("*****************Après************Mile courant date: "+str(self.listOfMilestonesObjects[i+1].initialDate  ))
-                    print("*****************Après************Mile courant mile: "+str(self.listOfMilestonesObjects[i+1].milestone  ))
-                    print("*****************Après************Mile courant datecalc: "+str(self.listOfMilestonesObjects[i+1].calculatedMilestone  ))
+                    # print("*****************Après************Mile -1 date: "+str(self.listOfMilestonesObjects[i].initialDate  ))
+                    # print("*****************Après************Mile -1 mile: "+str(self.listOfMilestonesObjects[i].milestone  ))
+                    # print("*****************Après************Mile -1 datecalc: "+str(self.listOfMilestonesObjects[i].calculatedMilestone  ))
+                    # print("*****************Après************Mile courant date: "+str(self.listOfMilestonesObjects[i+1].initialDate  ))
+                    # print("*****************Après************Mile courant mile: "+str(self.listOfMilestonesObjects[i+1].milestone  ))
+                    # print("*****************Après************Mile courant datecalc: "+str(self.listOfMilestonesObjects[i+1].calculatedMilestone  ))
                 
         def printEvent(self):        
             print("    ---******Event***DEB******")

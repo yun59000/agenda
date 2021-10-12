@@ -93,17 +93,22 @@ def choice():
       key = input("enter the key to modify: ")
       if key == "milestone":
           print("edit milestone: ")
-          milestoneLib = input("lib du milestone a edit: ")
+          milestoneLib = input("lib du milestone a edit ou supprimer: ")
           print("quelle information du milestone a modifer: ")
-          milestonekey = input("lib, initialDate ou milestone ? ")
+          milestonekey = input("lib, initialDate, milestone ou delete pour supprimer? ")
           print("format de date: YYYY-MM-DD")
-          milestoneNewValue = input("Nouvelle valeur ? ")
-          newdmilestone3 = {"mileLib" : milestoneLib,"key": milestonekey, "keyValue" : milestoneNewValue}
-          event.editEvent(key, newdmilestone3)
+          if milestonekey != "delete":                
+            milestoneNewValue = input("Nouvelle valeur ? ")
+            newdmilestone3 = {"mileLib" : milestoneLib,"key": milestonekey, "keyValue" : milestoneNewValue}
+            event.editEvent(key, newdmilestone3)
             # newdmilestone3 = {"mileLib" :"monmile2" ,"key":"lib", "keyValue" :"monmile3"}
             # agenda.listOfEvents[0].editEvent("milestone", newdmilestone3)
             # newdmilestone = {"mileLib" :"monmile1" ,"key":"milestone", "keyValue" :"6"}
             # agenda.listOfEvents[0].editEvent("milestone", newdmilestone)
+          else:
+              newdmilestone3 = {"mileLib" : milestoneLib,"key": milestonekey, "keyValue" : 5}
+              event.editEvent(key, newdmilestone3)
+              #ajouter recalcul des milestones  
           
       else:
         value = input("enter the new value: ")
@@ -112,7 +117,7 @@ def choice():
       choice = False 
     elif x == "3":
       lib = input("enter lib: veille de noel17 ")
-    #   delEvent(lib)
+      agenda.delEvent(lib)
       choice = True
     elif x == "4":
     #   showEvents()
